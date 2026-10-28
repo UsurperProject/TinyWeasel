@@ -1,14 +1,22 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+mod telnet;
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use telnet::Telnet;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn it_connects() {
+        let mut TELNET =
+            Telnet::new("localhost", 2157).expect("Failed to connect to the telnet server");
+    }
+
+    #[test]
+    fn it_executes_command() {
+        let mut TELNET =
+            Telnet::new("localhost", 2157).expect("Failed to connect to the telnet server");
+        TELNET
+            .send("echo 'Hello, World!'")
+            .expect("Failed to send command");
     }
 }
