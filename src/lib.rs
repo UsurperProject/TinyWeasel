@@ -12,11 +12,21 @@ mod tests {
     }
 
     #[test]
-    fn it_executes_command() {
+    fn command_output_matching() {
         let mut TELNET =
             Telnet::new("localhost", 2157).expect("Failed to connect to the telnet server");
-        TELNET
-            .send("echo 'Hello, World!'")
+        let response = TELNET
+            .send("echo 'Hello, World!'", None)
             .expect("Failed to send command");
+
+        assert_eq!(response, "Hello, World!");
+    }
+
+    #[test]
+    #[should_panic]
+    fn command_output_not_matching() {
+        let mut TELNET = Telnet::new("localhost", 2157).expect("Failed to connect to the telnet server");
+        let response = TELNET.send("echo 'Hello, World!'", None).expect("Failed to send command");
+        assert_eq!("Hello", response);
     }
 }
